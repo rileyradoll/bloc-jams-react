@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
+import PlayerBar from './PlayerBar';
 
 class Album extends Component {
   constructor(props) {
@@ -26,11 +27,11 @@ class Album extends Component {
 
   pause() {
     this.audioElement.pause();
-    this.setState({ isplaying: false });
+    this.setState({ isPlaying: false });
   }
 
   setSong(song) {
-    this.audioElement.src =song.audioSrc;
+    this.audioElement.src = song.audioSrc;
     this.setState({ currentSong: song });
   }
 
@@ -42,6 +43,14 @@ class Album extends Component {
       if (!isSameSong) { this.setSong(song); }
       this.play();
     }
+  }
+
+  handlePrevClick() {
+    const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
+    const newIndex = Math.max(0, currentIndex - 1);
+    const newSong = this.state.album.songs[newIndex];
+    this.setSong(newSong);
+    this.play(newSong);
   }
 
   render() {
@@ -66,7 +75,7 @@ class Album extends Component {
               <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
                 <td className="song-actions">
                   <button>
-                    <span className="song-Number">{index+1}</span>
+                    <span className="song-number">{index+1}</span>
                     <span className="ion-play"></span>
                     <span className="ion-pause"></span>
                   </button>
@@ -77,6 +86,12 @@ class Album extends Component {
             )}
           </tbody>
         </table>
+        <PlayerBar
+          isPlaying={this.state.isPlaying}
+          currentSong={this.state.currentSong}
+          handleSongClick={() => this.handleSongClick(this.state.currentSong)}
+          handlePrevClick={() => this.handlePrevClick()}
+        />
       </section>
     );
   }
