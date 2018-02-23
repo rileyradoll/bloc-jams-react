@@ -71,7 +71,7 @@ class Album extends Component {
     const newIndex = Math.max(0, currentIndex - 1);
     const newSong = this.state.album.songs[newIndex];
     if (!this.state.isPlaying) {return null;}
-    if (newSong === this.state.album.songs[0]) {return null;}
+    if (newSong === this.state.currentSong) {return null;}
     this.setSong(newSong);
     this.play(newSong);
   }
